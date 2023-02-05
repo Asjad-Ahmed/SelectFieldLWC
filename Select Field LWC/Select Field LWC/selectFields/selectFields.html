@@ -1,0 +1,233 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 12-14-2022
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<template>
+    <div class="slds-theme_default">
+        <template if:true={isSelectFieldScreen} >
+            
+            <h3 class="slds-section__title slds-theme_shade headerstyle slds-p-bottom_medium slds-p-top_medium" >
+                <span class="slds-truncate slds-p-horizontal_small slds-align_absolute-center slds-text-heading_medium" >
+                    <h1>Fields Selection</h1>
+                </span>
+            </h3>
+            <div class="slds-align_absolute-center slds-m-around_medium ">
+                <div style="width: 400px;">
+                    <lightning-combobox 
+                        label="Object"
+                        name="Object"
+                        onchange={selectObject}
+                        options={lstObjectPicklist}
+                        dropdown-alignment="auto"
+                        >
+                    </lightning-combobox>
+                </div>
+            </div>
+            <template if:true={showFields}>
+                <lightning-tabset class="slds-m-left_large">
+                    <lightning-tab label="Export" onactive={exportfieldSetHandle} >
+                        <div class="slds-m-top_medium slds-theme_default headerstyle">
+                            <template for:each={fieldSetOptions} for:item="item" for:index="index">
+                                <div key={item.lable} class="slds-form_horizontal slds-form slds-grid slds-wrap slds-p-left_x-small">
+                                    
+                                    <!-- <template if:false={item.required}> -->
+                                        <div class="slds-size_6-of-12">
+                                            <lightning-input 
+                                                data-index={index} 
+                                                type="checkbox" 
+                                                label={item.fieldName} 
+                                                name={item.fieldAPIName}
+                                                onchange={selectExportFieldChange}
+                                                
+                                                >
+                                            </lightning-input>
+                                        </div>
+                                    <!-- </template> -->
+                                    <!-- <template if:true={item.required}>
+                                        <div class="slds-size_9-of-12">
+                                            <lightning-input 
+                                                data-index={index} 
+                                                type="checkbox" 
+                                                label={item.fieldName} 
+                                                name={item.fieldAPIName}
+                                                onchange={selectFieldChange}
+                                                checked disabled>
+                                            </lightning-input>
+                                        </div>
+                                    </template> -->
+                                    <div class="slds-size_6-of-12 slds-text-align_left">
+                                        <!-- <template if:true={item.isFormulaField}>
+                                            Formula Field(Non editable)
+                                        </template> -->
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                            <div class="slds-m-around_medium slds-align_absolute-center">
+                                <span ><lightning-button
+                                    variant="brand"
+                                    label="Export as CSV"
+                                    onclick={exportHandle}
+                                ></lightning-button></span>
+                            </div>
+                    </lightning-tab>
+                    <lightning-tab label="Create record" title="2nd tab extended title" onactive={editfieldSetHandle}>
+                        <template if:false={isEditFieldScreen}>
+                            <div class="slds-m-top_medium slds-theme_default headerstyle">
+                                <template for:each={editfieldSetOptions} for:item="item" for:index="index">
+                                    <div key={item.lable} class="slds-form_horizontal slds-form slds-grid slds-wrap slds-p-left_x-small">
+                                        
+                                        <!-- <template if:false={item.required}> -->
+                                            <div class="slds-size_6-of-12">
+                                                <lightning-input 
+                                                    data-index={index} 
+                                                    type="checkbox" 
+                                                    label={item.fieldName} 
+                                                    name={item.fieldAPIName}
+                                                    onchange={selectEditFieldChange}
+                                                    required={item.required}
+                                                    class="validate"
+                                                    >
+                                                </lightning-input>
+                                            </div>
+                                        <!-- </template> -->
+                                        <!-- <template if:true={item.required}>
+                                            <div class="slds-size_9-of-12">
+                                                <lightning-input 
+                                                    data-index={index} 
+                                                    type="checkbox" 
+                                                    label={item.fieldName} 
+                                                    name={item.fieldAPIName}
+                                                    onchange={selectFieldChange}
+                                                    checked disabled>
+                                                </lightning-input>
+                                            </div>
+                                        </template> -->
+                                        <div class="slds-size_6-of-12 slds-text-align_left">
+                                            <!-- <template if:true={item.isFormulaField}>
+                                                Formula Field(Non editable)
+                                            </template> -->
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        
+                            <div class="slds-m-around_medium slds-align_absolute-center">
+                                <span ><lightning-button
+                                    variant="brand"
+                                    label="Next"
+                                    onclick={nextHandle}
+                                ></lightning-button></span>
+                            </div>
+                        </template>
+                    
+
+                        <template if:true={isEditFieldScreen}>
+                            <div class="slds-m-top_medium slds-theme_default headerstyle">
+                                <template for:each={finalFields} for:item="item" for:index="index">
+                                    <div key={item.fieldAPIName} class="slds-form_horizontal slds-form slds-grid slds-wrap slds-p-vertical_small slds-p-left_x-small">
+                                        
+                                        <template if:false={item.isPicklist}>
+                                            <template if:false={item.isReference}>
+                                                <div class="slds-size_9-of-12">
+                                                    <lightning-input 
+                                                        data-index={index} 
+                                                        type={item.fieldType}
+                                                        label={item.fieldName} 
+                                                        name={item.fieldAPIName}
+                                                        onchange={genericChange}
+                                                        required={item.required}
+                                                        class="validate">
+                                                    </lightning-input>
+                                                </div>
+                                            </template>
+                                        </template>
+                                        <template if:true={item.isPicklist}>
+                                            <template if:false={item.isReference}>
+                                                <div class="slds-size_9-of-12">
+                                                    <lightning-combobox 
+                                                        data-index={index} 
+                                                        label={item.fieldName} 
+                                                        name={item.fieldAPIName}
+                                                        onchange={genericChange}
+                                                        options={item.lstPicklist}
+                                                        dropdown-alignment="auto"
+                                                        required={item.required}
+                                                        class="validate">
+                                                    </lightning-combobox>
+                                                </div>
+                                            </template>
+                                        </template>
+                                        <template if:true={item.isReference}>
+                                            <div class="slds-size_9-of-12">
+
+                                                <lightning-record-edit-form
+                                                    object-api-name={sObjectName}>
+                                                    <lightning-input-field 
+                                                        data-index={index} 
+                                                        field-name={item.fieldAPIName}
+                                                        onchange={genericChange}> 
+                                                    </lightning-input-field>
+                                                </lightning-record-edit-form>
+
+                                                <!-- <c-custom-lookup 
+                                                    data-index={index} 
+                                                    onselectedlookup={genericChange} 
+                                                    labelname={item.fieldName} 
+                                                    sobjectapiname={sObjectName}
+                                                    icon='standard:account'
+                                                    placeholder="Search..." 
+                                                    name={item.fieldAPIName} 
+                                                    isfilter="faslse">
+                                                </c-custom-lookup> -->
+                                            </div>
+                                        </template>
+                                        <div class="slds-size_2-of-12"></div>
+                                    </div>
+                                </template>
+                            </div>
+                            
+                            <div class="slds-align_absolute-center ">
+                                <div class="slds-m-around_medium">
+                                    <span><lightning-button
+                                        variant="brand"
+                                        label="Previous"
+                                        onclick={PreviousHandle}
+                                    ></lightning-button></span>
+                                </div>
+                                <span class="slds-m-around_medium">
+                                <lightning-button
+                                        
+                                        variant="brand"
+                                        label="Save"
+                                        onclick={saveHandle}
+                                    ></lightning-button>
+                                </span>
+                            </div> 			
+                        </template>
+                    </lightning-tab>
+                </lightning-tabset>
+            </template>
+        </template>
+        <div style="height: 50px;">
+
+        </div>
+    </div>
+
+    <template if:true={isLoading}>
+        <div>
+            <lightning-spinner alternative-text="Loading" size="large" variant="brand"></lightning-spinner>
+        </div>
+    </template>
+    <!-- <lightning-input
+        type="number"
+        label="Price"
+        value="1234.55"
+        formatter="currency"
+        step=".01"
+    >
+    </lightning-input> -->
+</template>
