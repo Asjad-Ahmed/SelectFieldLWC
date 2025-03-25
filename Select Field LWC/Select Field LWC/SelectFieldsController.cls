@@ -122,6 +122,7 @@ public class SelectFieldsController {
     @AuraEnabled
     public static string saveRecord(String jsonRecord, String sObjectAPIName){
         try {
+            objectFields('Lead');
             List<FieldWrapper> lstFieldWrapperValues = new List<FieldWrapper>();
             if (jsonRecord != null && jsonRecord != '' && sObjectAPIName != null && sObjectAPIName != '') 
             {
