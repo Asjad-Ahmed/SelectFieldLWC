@@ -5,11 +5,14 @@
  * @last modified on  : 12-14-2022
  * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
+
+
 public class SelectFieldsController {
    @AuraEnabled
    public static string objectFields(String sObjectName)
    {
         try {
+            String chutiya  = '';
             System.debug('Start----'+limits.getCpuTime());
             //List<FieldWrapper> lstFieldWrapper = new List<FieldWrapper>();
             //Id recordId = Id.valueOf(strRecordId);
