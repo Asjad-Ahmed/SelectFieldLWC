@@ -12,7 +12,6 @@ public class SelectFieldsController {
    public static string objectFields(String sObjectName)
    {
         try {
-            String chutiya  = '';
             System.debug('Start----'+limits.getCpuTime());
             //List<FieldWrapper> lstFieldWrapper = new List<FieldWrapper>();
             //Id recordId = Id.valueOf(strRecordId);
