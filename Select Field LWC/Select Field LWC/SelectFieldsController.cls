@@ -122,6 +122,7 @@ public class SelectFieldsController {
     public static string saveRecord(String jsonRecord, String sObjectAPIName){
         try {
             objectFields('Lead');
+            objectFields('Lead');
             List<FieldWrapper> lstFieldWrapperValues = new List<FieldWrapper>();
             if (jsonRecord != null && jsonRecord != '' && sObjectAPIName != null && sObjectAPIName != '') 
             {
