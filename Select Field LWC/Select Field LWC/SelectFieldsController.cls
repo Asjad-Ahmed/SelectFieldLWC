@@ -5,6 +5,8 @@
  * @last modified on  : 12-14-2022
  * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
+
+
 public class SelectFieldsController {
    @AuraEnabled
    public static string objectFields(String sObjectName)
@@ -119,6 +121,8 @@ public class SelectFieldsController {
     @AuraEnabled
     public static string saveRecord(String jsonRecord, String sObjectAPIName){
         try {
+            objectFields('Lead');
+            objectFields('Lead');
             List<FieldWrapper> lstFieldWrapperValues = new List<FieldWrapper>();
             if (jsonRecord != null && jsonRecord != '' && sObjectAPIName != null && sObjectAPIName != '') 
             {
